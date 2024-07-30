@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+import dataclasses
+import os
+import yaml
+
+import ci.util
+import gci.componentmodel as cm
+
+
+component_descriptor_base_path = os.path.abspath(ci.util.check_env('BASE_DEFINITION_PATH'))
+component_descriptor_path = os.path.abspath(ci.util.check_env('COMPONENT_DESCRIPTOR_PATH'))
+
+ocm_repo = 'europe-docker.pkg.dev/gardener-project/releases'
+
+own_dir = os.path.abspath(os.path.dirname(__file__))
+repo_dir = os.path.abspath(os.path.join(own_dir, os.pardir))
+
+postgresql_versionfile = os.path.join(repo_dir, 'POSTGRESQL_VERSION')
+
+
+def version_from_file(file_path: str):
+    with open(file_path) as version_file:
+        version = version_file.read().strip()
+    return version
+
+
+def parse_component_descriptor():
+    component_descriptor = cm.ComponentDescriptor.from_dict(
+        ci.util.parse_yaml_file(component_descriptor_base_path)
+    )
+    return component_descriptor
+
+
+def add_postgresql_resource(
+    component: cm.Component,
+):
+    postgresql_version = version_from_file(postgresql_versionfile)
+
+    component.resources.append(
+        cm.Resource(
+            name='postgresql',
+            version=postgresql_version,
+            type='helmChart',
+            access=cm.OciAccess(
+                imageReference=f'{ocm_repo}/charts/ocm-gear/postgresql:{postgresql_version}',
+            ),
+            relation=cm.ResourceRelation.EXTERNAL,
+        )
+    )
+
+
+def main():
+    component_descriptor = parse_component_descriptor()
+    component = component_descriptor.component
+
+    add_postgresql_resource(
+        component=component,
+    )
+
+    with open(component_descriptor_path, 'w') as f:
+        yaml.dump(
+            data=dataclasses.asdict(component_descriptor),
+            Dumper=cm.EnumValueYamlDumper,
+            stream=f,
+        )
+
+
+if __name__ == '__main__':
+    main()

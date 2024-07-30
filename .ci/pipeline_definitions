@@ -1,0 +1,24 @@
+delivery-db:
+  base_definition:
+    traits:
+      version: ~
+      component_descriptor:
+        component_name: ocm.software/ocm-gear/delivery-db
+        ocm_repository: europe-docker.pkg.dev/gardener-project/releases
+
+  jobs:
+    manual-release:
+      traits:
+        version:
+          preprocess: finalize
+          inject_effective_version: True
+        release:
+          nextversion: bump_minor
+          release_notes_policy: disabled
+          release_commit_publishing_policy: tag_and_merge_back
+
+    head-update:
+      traits:
+        version: ~
+        component_descriptor:
+          ocm_repository: europe-docker.pkg.dev/gardener-project/snapshots
