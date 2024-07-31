@@ -1,9 +1,9 @@
-delivery-db:
+delivery-database:
   base_definition:
     traits:
       version: ~
       component_descriptor:
-        component_name: ocm.software/ocm-gear/delivery-db
+        component_name: ocm.software/ocm-gear/delivery-database
         ocm_repository: europe-docker.pkg.dev/gardener-project/releases
 
   jobs:

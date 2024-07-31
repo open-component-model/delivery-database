@@ -1,7 +1,7 @@
 version = 1
-SPDX-PackageName = "OCM Delivery DB"
+SPDX-PackageName = "OCM Delivery Database"
 SPDX-PackageSupplier = "Jonas Brand <j.brand@sap.com>"
-SPDX-PackageDownloadLocation = "https://github.com/open-component-model/delivery-db"
+SPDX-PackageDownloadLocation = "https://github.com/open-component-model/delivery-database"
 
 [[annotations]]
 path = "**"
