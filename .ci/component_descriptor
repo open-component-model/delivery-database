@@ -2,10 +2,11 @@
 
 import dataclasses
 import os
+
 import yaml
 
 import ci.util
-import gci.componentmodel as cm
+import ocm
 
 
 component_descriptor_base_path = os.path.abspath(ci.util.check_env('BASE_DEFINITION_PATH'))
@@ -26,26 +27,26 @@ def version_from_file(file_path: str):
 
 
 def parse_component_descriptor():
-    component_descriptor = cm.ComponentDescriptor.from_dict(
+    component_descriptor = ocm.ComponentDescriptor.from_dict(
         ci.util.parse_yaml_file(component_descriptor_base_path)
     )
     return component_descriptor
 
 
 def add_postgresql_resource(
-    component: cm.Component,
+    component: ocm.Component,
 ):
     postgresql_version = version_from_file(postgresql_versionfile)
 
     component.resources.append(
-        cm.Resource(
+        ocm.Resource(
             name='postgresql',
             version=postgresql_version,
             type='helmChart',
-            access=cm.OciAccess(
+            access=ocm.OciAccess(
                 imageReference=f'{ocm_repo}/charts/ocm-gear/postgresql:{postgresql_version}',
             ),
-            relation=cm.ResourceRelation.EXTERNAL,
+            relation=ocm.ResourceRelation.EXTERNAL,
         )
     )
 
@@ -61,7 +62,7 @@ def main():
     with open(component_descriptor_path, 'w') as f:
         yaml.dump(
             data=dataclasses.asdict(component_descriptor),
-            Dumper=cm.EnumValueYamlDumper,
+            Dumper=ocm.EnumValueYamlDumper,
             stream=f,
         )
 
