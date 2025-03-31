@@ -17,7 +17,8 @@ ocm_repo = 'europe-docker.pkg.dev/gardener-project/releases'
 own_dir = os.path.abspath(os.path.dirname(__file__))
 repo_dir = os.path.abspath(os.path.join(own_dir, os.pardir))
 
-postgresql_versionfile = os.path.join(repo_dir, 'POSTGRESQL_VERSION')
+chart_versionfile = os.path.join(repo_dir, 'POSTGRESQL_CHART_VERSION')
+image_versionfile = os.path.join(repo_dir, 'POSTGRESQL_IMAGE_VERSION')
 
 
 def version_from_file(file_path: str):
@@ -36,15 +37,27 @@ def parse_component_descriptor():
 def add_postgresql_resource(
     component: ocm.Component,
 ):
-    postgresql_version = version_from_file(postgresql_versionfile)
+    chart_version = version_from_file(chart_versionfile)
 
     component.resources.append(
         ocm.Resource(
             name='postgresql',
-            version=postgresql_version,
-            type='helmChart',
+            version=chart_version,
+            type=ocm.ArtefactType.HELM_CHART,
             access=ocm.OciAccess(
-                imageReference=f'{ocm_repo}/charts/ocm-gear/postgresql:{postgresql_version}',
+                imageReference=f'{ocm_repo}/charts/ocm-gear/postgresql:{chart_version}',
+            ),
+            relation=ocm.ResourceRelation.EXTERNAL,
+        )
+    )
+
+    component.resources.append(
+        ocm.Resource(
+            name='postgresql',
+            version=image_versionfile,
+            type=ocm.ArtefactType.OCI_IMAGE,
+            access=ocm.OciAccess(
+                imageReference=f'docker.io/bitnami/postgresql:{image_versionfile}',
             ),
             relation=ocm.ResourceRelation.EXTERNAL,
         )
