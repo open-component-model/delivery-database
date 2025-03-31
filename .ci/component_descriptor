@@ -38,6 +38,7 @@ def add_postgresql_resource(
     component: ocm.Component,
 ):
     chart_version = version_from_file(chart_versionfile)
+    image_version = version_from_file(image_versionfile)
 
     component.resources.append(
         ocm.Resource(
@@ -54,10 +55,10 @@ def add_postgresql_resource(
     component.resources.append(
         ocm.Resource(
             name='postgresql',
-            version=image_versionfile,
+            version=image_version,
             type=ocm.ArtefactType.OCI_IMAGE,
             access=ocm.OciAccess(
-                imageReference=f'docker.io/bitnami/postgresql:{image_versionfile}',
+                imageReference=f'docker.io/bitnami/postgresql:{image_version}',
             ),
             relation=ocm.ResourceRelation.EXTERNAL,
         )
