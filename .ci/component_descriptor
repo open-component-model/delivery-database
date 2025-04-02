@@ -61,6 +61,19 @@ def add_postgresql_resource(
                 imageReference=f'docker.io/bitnami/postgresql:{image_version}',
             ),
             relation=ocm.ResourceRelation.EXTERNAL,
+            labels=[
+                ocm.Label(
+                    name='gardener.cloud/cve-categorisation',
+                    value={
+                        'authentication_enforced': True,
+                        'availability_requirement': 'high',
+                        'confidentiality_requirement': 'high',
+                        'integrity_requirement': 'high',
+                        'network_exposure': 'protected',
+                        'user_interaction': 'gardener-operator',
+                    },
+                ),
+            ]
         )
     )
 
