@@ -58,7 +58,7 @@ def add_postgresql_resource(
             version=image_version,
             type=ocm.ArtefactType.OCI_IMAGE,
             access=ocm.OciAccess(
-                imageReference=f'docker.io/bitnami/postgresql:{image_version}',
+                imageReference=f'europe-docker.pkg.dev/gardener-project/releases/ocm-gear/postgres:{image_version}',
             ),
             relation=ocm.ResourceRelation.EXTERNAL,
             labels=[
