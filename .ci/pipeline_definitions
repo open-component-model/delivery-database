@@ -5,7 +5,13 @@ delivery-database:
       component_descriptor:
         component_name: ocm.software/ocm-gear/delivery-database
         ocm_repository: europe-docker.pkg.dev/gardener-project/releases
-
+    repo:
+      source_labels:
+      - name: cloud.gardener.cnudie/dso/scanning-hints/source_analysis/v1
+        value:
+          policy: skip
+          comment: |
+            this repository does not contain source code, but only build descriptions.
   jobs:
     manual-release:
       traits:
