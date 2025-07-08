@@ -1,0 +1,67 @@
+name: delivery-db
+installation:
+  ocm_references:
+    - helm_chart_name: postgresql
+      name: ocm.software/ocm-gear/delivery-database
+      version: 0.8.0-dev
+      artefact:
+        name: postgresql
+        version: 16.6.1
+      mappings: []
+  value_templates:
+    - helm_chart_name: postgresql
+      helm_attribute: fullnameOverride
+      value: delivery-db
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: namespaceOverride
+      value: ${target_namespace}
+      value_type: python-string-template
+    - helm_chart_name: postgresql
+      helm_attribute: image.registry
+      value: 'europe-docker.pkg.dev/gardener-project/releases' # TODO: replace once delivery-database ocm also publishes helm mappings
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: image.repository
+      value: 'ocm-gear/postgres' # TODO: replace once delivery-database ocm also publishes helm mappings
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: image.tag
+      value: '16.8.0' # TODO: replace once delivery-database ocm also publishes helm mappings
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: global.security.allowInsecureImages
+      value: True
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: postgresqlDataDir
+      value: '/data/pgdata'
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: primary.persistence.mountPath
+      value: '/data/'
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: primary.containerSecurityContext.readOnlyRootFilesystem
+      value: False
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: primary.extraEnvVars
+      value:
+        - name: POSTGRESQL_MAX_CONNECTIONS
+          value: '200'
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: primary.resources.requests.cpu
+      value: '250m'
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: primary.resources.requests.memory
+      value: '256Mi'
+      value_type: literal
+    - helm_chart_name: postgresql
+      helm_attribute: auth.postgresPassword
+      value: ${postgres_password}
+      value_type: python-string-template
+outputs: []
+dependencies: []
