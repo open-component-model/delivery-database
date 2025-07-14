@@ -3,7 +3,7 @@ installation:
   ocm_references:
     - helm_chart_name: postgresql
       name: ocm.software/ocm-gear/delivery-database
-      version: 0.8.0-dev
+      version: 0.8.0
       artefact:
         name: postgresql
         version: 16.6.1
