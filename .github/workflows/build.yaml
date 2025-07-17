@@ -31,7 +31,7 @@ jobs:
         blobs_dir=blobs.d
         mkdir $blobs_dir
         extension_definitions="extension-definitions.yaml"
-        yq -i '.installation.ocm_references[].version = strenv(next_version)' ${extension_definitions}
+        yq -i '.installation.ocm_references[].version = strenv(version)' ${extension_definitions}
         tar czf ${blobs_dir}/extension_definitions.tar.gz ${extension_definitions}
     - uses: gardener/cc-utils/.github/actions/export-ocm-fragments@master
       with:
