@@ -37,6 +37,7 @@ jobs:
       with:
         ocm-resources: |
           name: odg-extension-definitions
+          type: odg-extension
           relation: local
           access:
             type: localBlob
