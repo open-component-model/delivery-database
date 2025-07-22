@@ -7,7 +7,10 @@ installation:
       artefact:
         name: postgresql
         version: 16.6.1
-      mappings: []
+      mappings:
+        - name: postgresql
+          version: 0.11.0-dev
+          artefact_type: helmchart-imagemap
   value_templates:
     - helm_chart_name: postgresql
       helm_attribute: fullnameOverride
@@ -19,15 +22,7 @@ installation:
       value_type: python-string-template
     - helm_chart_name: postgresql
       helm_attribute: image.registry
-      value: 'europe-docker.pkg.dev/gardener-project/releases' # TODO: replace once delivery-database ocm also publishes helm mappings
-      value_type: literal
-    - helm_chart_name: postgresql
-      helm_attribute: image.repository
-      value: 'ocm-gear/postgres' # TODO: replace once delivery-database ocm also publishes helm mappings
-      value_type: literal
-    - helm_chart_name: postgresql
-      helm_attribute: image.tag
-      value: '16.8.0' # TODO: replace once delivery-database ocm also publishes helm mappings
+      value: '' # required to use repository + tag from image-mapping only
       value_type: literal
     - helm_chart_name: postgresql
       helm_attribute: global.security.allowInsecureImages
