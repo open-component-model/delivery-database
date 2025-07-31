@@ -58,5 +58,9 @@ installation:
       helm_attribute: auth.postgresPassword
       value: ${postgres_password}
       value_type: python-string-template
+    - helm_chart_name: postgresql
+      helm_attribute: auth.existingSecret
+      value: delivery-db-password
+      value_type: literal
 outputs: []
 dependencies: []
